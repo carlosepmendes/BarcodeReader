@@ -2,6 +2,7 @@ package example.com.barcodereader;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -71,17 +72,21 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        //retrieve result of scanning - instantiate ZXing object
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        //check we have a valid result
         if (scanningResult != null) {
-            //we have a result
+            //get content from Intent Result
             String scanContent = scanningResult.getContents();
+            //get format name of data scanned
             String scanFormat = scanningResult.getFormatName();
 
-            formatTxt.setText("FORMAT: " + scanFormat);
-            contentTxt.setText("CONTENT: " + scanContent);
+            Log.v("SCAN", "content: " + scanContent + " - format: " + scanFormat);
         }else{
+            //invalid scan data or scan canceled
             Toast toast = Toast.makeText(getApplicationContext(),
-                    "No scan data received!", Toast.LENGTH_SHORT);
+                    "No book scan data received!", Toast.LENGTH_SHORT);
             toast.show();
         }
     }
